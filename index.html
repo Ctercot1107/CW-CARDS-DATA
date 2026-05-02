@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>SCP:CARDS - 自动跳转</title>
+    <style>
+        body {
+            background: #0a0f1a;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #ddd;
+        }
+        .container {
+            text-align: center;
+            background: #1a1f2a;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid #d94a3c;
+        }
+        a {
+            color: #d94a3c;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .version {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+    <script>
+        // 当前最新版本（发布新版本时修改此处）
+        var LATEST_VERSION = "v1.8.3";
+        var targetUrl = "./" + LATEST_VERSION + "/game.html";
+        // 立即跳转
+        window.location.replace(targetUrl);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <p>正在加载 SCP:CARDS 最新版本 <strong id="ver"></strong></p>
+        <p class="version">如果长时间没有反应，请<a id="fallbackLink" href="./v1.8.3/game.html">点击这里</a>直接进入游戏</p>
+    </div>
+    <script>
+        document.getElementById('ver').innerText = LATEST_VERSION;
+        document.getElementById('fallbackLink').href = "./" + LATEST_VERSION + "/game.html";
+    </script>
+</body>
+</html>
