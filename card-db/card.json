@@ -116,14 +116,14 @@
     "ghostOp": 0,
     "isLiving": true,
     "subType": "鬼",
+    "isEquipment": false,
     "abilities": [
       {
         "name": "吸血",
         "desc": "消耗0.5行动点，随机对一个敌方单位造成2点真实伤害，自身回复2点生命（不超过最大生命）。",
         "code": "var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var enemies = isHostSide ? onlineGameState.enemyUnits : onlineGameState.myUnits; var alive=[]; for(var i=0;i<enemies.length;i++){ if(enemies[i] && enemies[i].hp>0) alive.push(i); } if(alive.length===0){ onlineLog('吸血失败：无敌方单位'); }else{ var idx=alive[Math.floor(Math.random()*alive.length)]; var target=enemies[idx]; target.hp-=2; u.hp=Math.min(u.maxHp,u.hp+2); onlineLog(u.name+'吸血 '+target.name+' -2，自身回复2生命'); if(target.hp<=0) onlineLog(target.name+'死亡'); }"
       }
-    ],
-    "isEquipment": false
+    ]
   },
   {
     "name": "一次性伤害发生器[中级]",
@@ -514,7 +514,7 @@
     "ghostOp": 0,
     "isLiving": false,
     "abilities": null,
-    "isEquipment": false
+    "isEquipment": false,
     "subType": "异"
   },
   {
