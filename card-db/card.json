@@ -15,8 +15,6 @@
         "subType": null,
         "abilities": []
     },
-    { name: "巨鬼", type: "鬼", op: 3, f: 1, hp: 4, maxHp: 4, skills: "无视防御", once: false, ghostOp: 0, isLiving: true, subType: null, abilities: null },
-    { name: "游魂", type: "鬼", op: 1, f: 0, hp: 1, maxHp: 1   , skills: "无视防御", once: false, ghostOp: 0, isLiving: true, subType: null, abilities: null },
     {
         "name": "战士 #2",
         "type": "人",
