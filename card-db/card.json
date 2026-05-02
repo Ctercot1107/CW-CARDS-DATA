@@ -1,35 +1,33 @@
 [
-
-    
-    {
-        "name": "战士 #1",
-        "type": "人",
-        "op": 2,
-        "f": 0,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "",
-        "once": false,
-        "ghostOp": 0,
-        "isLiving": true,
-        "subType": null,
-        "abilities": []
-    },
-    {
-        "name": "战士 #2",
-        "type": "人",
-        "op": 3,
-        "f": 1,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "",
-        "once": false,
-        "ghostOp": 0,
-        "isLiving": true,
-        "subType": null,
-        "abilities": []
-    },
-{
+  {
+    "name": "战士 #1",
+    "type": "人",
+    "op": 2,
+    "f": 0,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": []
+  },
+  {
+    "name": "战士 #2",
+    "type": "人",
+    "op": 3,
+    "f": 1,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": []
+  },
+  {
     "name": "剑术大师",
     "type": "人",
     "op": 3,
@@ -57,7 +55,7 @@
     "abilities": null,
     "isEquipment": false
   },
- {
+  {
     "name": "天师符",
     "type": "道",
     "op": 0,
@@ -71,21 +69,20 @@
     "abilities": null,
     "isEquipment": false
   },
-    {
-        "name": "一次性伤害发生器[低级]",
-        "type": "器",
-        "op": 2,
-        "f": 0,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "",
-        "once": true,
-        "ghostOp": 0,
-        "isLiving": false,
-        "subType": null,
-        "abilities": []
-    },
-
+  {
+    "name": "一次性伤害发生器[低级]",
+    "type": "器",
+    "op": 2,
+    "f": 0,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "",
+    "once": true,
+    "ghostOp": 0,
+    "isLiving": false,
+    "subType": null,
+    "abilities": []
+  },
   {
     "name": "镜中仙",
     "type": "异",
@@ -101,8 +98,8 @@
     "abilities": [
       {
         "name": "镜像",
-        "desc": "消耗0.5行动点，随机复制一个敌方单位的属性（攻击、防御、最大生命）到己方空槽位，复制体生命为1。",
-        "code": "var enemies=(onlineMyRole==='host')?onlineGameState.enemyUnits:onlineGameState.myUnits; var alive=[]; for(var i=0;i<enemies.length;i++){ if(enemies[i]&&enemies[i].hp>0) alive.push(i); } if(alive.length===0){ onlineLog('镜像失败：无敌方单位'); }else{ var idx=alive[Math.floor(Math.random()*alive.length)]; var target=enemies[idx]; var myUnits=(onlineMyRole==='host')?onlineGameState.myUnits:onlineGameState.enemyUnits; var empty=-1; for(var i=0;i<12;i++){ if(!myUnits[i]||myUnits[i].hp<=0){ empty=i; break; } } if(empty!==-1){ var clone=JSON.parse(JSON.stringify(target)); clone.hp=1; clone.maxHp=1; clone.name=target.name+'镜像'; myUnits[empty]=clone; onlineLog('镜像复制了'+target.name+'，生成于槽位'+(empty+1)); }else{ onlineLog('无空槽位，镜像失败'); } }"
+        "desc": "消耗0.5行动点，随机复制一个敌方单位的属性到己方空槽位，复制体生命为1。",
+        "code": "var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var enemies = isHostSide ? onlineGameState.enemyUnits : onlineGameState.myUnits; var myUnits = isHostSide ? onlineGameState.myUnits : onlineGameState.enemyUnits; var alive=[]; for(var i=0;i<enemies.length;i++){ if(enemies[i] && enemies[i].hp>0) alive.push(i); } if(alive.length===0){ onlineLog('镜像失败：无敌方单位'); }else{ var idx=alive[Math.floor(Math.random()*alive.length)]; var target=enemies[idx]; var empty=-1; for(var i=0;i<12;i++){ if(!myUnits[i] || myUnits[i].hp<=0){ empty=i; break; } } if(empty!==-1){ var clone=JSON.parse(JSON.stringify(target)); clone.hp=1; clone.maxHp=1; clone.name=target.name+'镜像'; myUnits[empty]=clone; onlineLog('镜像复制了'+target.name+'，生成于槽位'+(empty+1)); }else{ onlineLog('无空槽位，镜像失败'); } }"
       }
     ],
     "isEquipment": false
@@ -123,97 +120,96 @@
       {
         "name": "吸血",
         "desc": "消耗0.5行动点，随机对一个敌方单位造成2点真实伤害，自身回复2点生命（不超过最大生命）。",
-        "code": "var enemies=(onlineMyRole==='host')?onlineGameState.enemyUnits:onlineGameState.myUnits; var alive=[]; for(var i=0;i<enemies.length;i++){ if(enemies[i]&&enemies[i].hp>0) alive.push(i); } if(alive.length===0){ onlineLog('吸血失败：无敌方单位'); }else{ var idx=alive[Math.floor(Math.random()*alive.length)]; var target=enemies[idx]; target.hp-=2; u.hp=Math.min(u.maxHp,u.hp+2); onlineLog(u.name+'吸血 '+target.name+' -2，自身回复2生命'); if(target.hp<=0) onlineLog(target.name+'死亡'); }"
+        "code": "var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var enemies = isHostSide ? onlineGameState.enemyUnits : onlineGameState.myUnits; var alive=[]; for(var i=0;i<enemies.length;i++){ if(enemies[i] && enemies[i].hp>0) alive.push(i); } if(alive.length===0){ onlineLog('吸血失败：无敌方单位'); }else{ var idx=alive[Math.floor(Math.random()*alive.length)]; var target=enemies[idx]; target.hp-=2; u.hp=Math.min(u.maxHp,u.hp+2); onlineLog(u.name+'吸血 '+target.name+' -2，自身回复2生命'); if(target.hp<=0) onlineLog(target.name+'死亡'); }"
       }
     ],
     "isEquipment": false
   },
-
-    {
-        "name": "一次性伤害发生器[中级]",
-        "type": "器",
-        "op": 3,
-        "f": 0,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "",
-        "once": true,
-        "ghostOp": 0,
-        "isLiving": false,
-        "subType": null,
-        "abilities": []
-    },
-    {
-        "name": "一次性伤害发生器[高级]",
-        "type": "器",
-        "op": 5,
-        "f": 1,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "",
-        "once": true,
-        "ghostOp": 0,
-        "isLiving": false,
-        "subType": null,
-        "abilities": []
-    },
-    {
-        "name": "EX-355实体",
-        "type": "异",
-        "op": 4,
-        "f": 1,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "",
-        "once": false,
-        "ghostOp": 0,
-        "isLiving": true,
-        "subType": null,
-        "abilities": []
-    },
-    {
-        "name": "活死人",
-        "type": "异",
-        "op": 2,
-        "f": 1,
-        "hp": 4,
-        "maxHp": 4,
-        "skills": "op对鬼2",
-        "once": false,
-        "ghostOp": 2,
-        "isLiving": false,
-        "subType": null,
-        "abilities": []
-    },
-    {
-        "name": "？",
-        "type": "异",
-        "op": 100,
-        "f": 0,
-        "hp": 1,
-        "maxHp": 1,
-        "skills": "UNKNOW ENTITY",
-        "once": false,
-        "ghostOp": 0,
-        "isLiving": true,
-        "subType": null,
-        "abilities": []
-    },
-    {
-        "name": "占位符",
-        "type": "异",
-        "op": 0,
-        "f": 1,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "",
-        "once": false,
-        "ghostOp": 0,
-        "isLiving": true,
-        "subType": null,
-        "abilities": []
-    },
-    {
+  {
+    "name": "一次性伤害发生器[中级]",
+    "type": "器",
+    "op": 3,
+    "f": 0,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "",
+    "once": true,
+    "ghostOp": 0,
+    "isLiving": false,
+    "subType": null,
+    "abilities": []
+  },
+  {
+    "name": "一次性伤害发生器[高级]",
+    "type": "器",
+    "op": 5,
+    "f": 1,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "",
+    "once": true,
+    "ghostOp": 0,
+    "isLiving": false,
+    "subType": null,
+    "abilities": []
+  },
+  {
+    "name": "EX-355实体",
+    "type": "异",
+    "op": 4,
+    "f": 1,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": []
+  },
+  {
+    "name": "活死人",
+    "type": "异",
+    "op": 2,
+    "f": 1,
+    "hp": 4,
+    "maxHp": 4,
+    "skills": "对鬼op2",
+    "once": false,
+    "ghostOp": 2,
+    "isLiving": false,
+    "subType": null,
+    "abilities": []
+  },
+  {
+    "name": "？",
+    "type": "异",
+    "op": 100,
+    "f": 0,
+    "hp": 1,
+    "maxHp": 1,
+    "skills": "UNKNOW ENTITY",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": []
+  },
+  {
+    "name": "占位符",
+    "type": "异",
+    "op": 0,
+    "f": 1,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": []
+  },
+  {
     "name": "鬼龙",
     "type": "鬼",
     "op": 5,
@@ -226,58 +222,56 @@
     "isLiving": true,
     "subType": "龙",
     "abilities": [
-        {
-            "name": "龙息",
-            "desc": "对敌方所有单位造成1点伤害。消耗2点生命。",
-            "code": "if(u.hp >= 3) { u.hp -= 2; var enemies = (onlineMyRole === 'host') ? onlineGameState.enemyUnits : onlineGameState.myUnits; for(var i=0;i<enemies.length;i++) { if(enemies[i] && enemies[i].hp > 0) { enemies[i].hp -= 1; } } onlineLog('龙息: 敌方全体-1'); } else { onlineLog('龙息失败: 生命不足'); }"
-        }
+      {
+        "name": "龙息",
+        "desc": "对敌方所有单位造成1点伤害。消耗2点生命。",
+        "code": "if(u.hp >= 3) { u.hp -= 2; var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var enemies = isHostSide ? onlineGameState.enemyUnits : onlineGameState.myUnits; for(var i=0;i<enemies.length;i++) { if(enemies[i] && enemies[i].hp > 0) { enemies[i].hp -= 1; } } onlineLog('龙息: 敌方全体-1'); } else { onlineLog('龙息失败: 生命不足'); }"
+      }
     ]
-    },
-
-    {
-        "name": "雷神符",
-        "type": "道",
-        "op": 0,
-        "f": 0,
-        "hp": 1,
-        "maxHp": 1,
-        "skills": "一次性·对鬼7",
-        "once": true,
-        "ghostOp": 7,
-        "isLiving": false,
-        "subType": null,
-        "abilities": null
-    },
-    {
-        "name": "超级电池",
-        "type": "电",
-        "op": 0,
-        "f": 0,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "电量5",
-        "once": false,
-        "energy": 5,
-        "isLiving": false,
-        "subType": null,
-        "abilities": null
-    },
-    {
-        "name": "电锯",
-        "type": "电",
-        "op": 3,
-        "f": 0,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "需电2",
-        "once": false,
-        "energyCost": 2,
-        "isLiving": false,
-        "subType": null,
-        "abilities": null
-    },
-
-{
+  },
+  {
+    "name": "雷神符",
+    "type": "道",
+    "op": 0,
+    "f": 0,
+    "hp": 1,
+    "maxHp": 1,
+    "skills": "一次性·对鬼7",
+    "once": true,
+    "ghostOp": 7,
+    "isLiving": false,
+    "subType": null,
+    "abilities": null
+  },
+  {
+    "name": "超级电池",
+    "type": "电",
+    "op": 0,
+    "f": 0,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "电量5",
+    "once": false,
+    "energy": 5,
+    "isLiving": false,
+    "subType": null,
+    "abilities": null
+  },
+  {
+    "name": "电锯",
+    "type": "电",
+    "op": 3,
+    "f": 0,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "需电2",
+    "once": false,
+    "energyCost": 2,
+    "isLiving": false,
+    "subType": null,
+    "abilities": null
+  },
+  {
     "name": "吞噬者",
     "type": "异",
     "op": 2,
@@ -290,252 +284,265 @@
     "isLiving": true,
     "subType": null,
     "abilities": [
-        {
-            "name": "吞噬",
-            "desc": "消耗0.5行动点，牺牲己方一个生命值最低的单位，吞噬者恢复全部生命并攻击力+2。",
-            "code": "var myUnits = onlineGameState.myUnits; var minHp = 9999, minIdx = -1; for(var i=0;i<myUnits.length;i++){ var card = myUnits[i]; if(card && card !== u && card.hp > 0 && card.hp < minHp){ minHp = card.hp; minIdx = i; } } if(minIdx !== -1){ var victim = myUnits[minIdx]; victim.hp = 0; u.hp = u.maxHp; u.op += 2; onlineLog(u.name + ' 吞噬了 ' + victim.name + '，恢复满血，攻击力+' + 2); } else { onlineLog('吞噬失败：没有其他可用的己方单位'); }"
-        }
+      {
+        "name": "吞噬",
+        "desc": "消耗0.5行动点，牺牲己方一个生命值最低的单位，吞噬者恢复全部生命并攻击力+2。",
+        "code": "var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var myUnits = isHostSide ? onlineGameState.myUnits : onlineGameState.enemyUnits; var minHp = 9999, minIdx = -1; for(var i=0;i<myUnits.length;i++){ var card = myUnits[i]; if(card && card !== u && card.hp > 0 && card.hp < minHp){ minHp = card.hp; minIdx = i; } } if(minIdx !== -1){ var victim = myUnits[minIdx]; victim.hp = 0; u.hp = u.maxHp; u.op += 2; onlineLog(u.name + ' 吞噬了 ' + victim.name + '，恢复满血，攻击力+' + 2); } else { onlineLog('吞噬失败：没有其他可用的己方单位'); }"
+      }
     ]
-},
-
-    {
-        "name": "连锁炸弹",
-        "type": "炸",
-        "op": 0,
-        "f": 0,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "FW3·不稳",
-        "once": true,
-        "isBomb": true,
-        "fw": 3,
-        "stable": false,
-        "isLiving": false,
-        "subType": null,
-        "abilities": null
-    },
-    {
-        "name": "火焰之剑",
-        "type": "武",
-        "equipType": "武",
-        "equipHp": 3,
-        "equipMaxHp": 3,
-        "equipF": 0,
-        "opBonus": 3,
-        "overrideOp": null,
-        "special": "burn",
-        "killCount": 0,
-        "isEquipment": true,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "增加3点攻击",
-        "subType": null
-    },
-    {
-        "name": "冰霜之刃",
-        "type": "武",
-        "equipType": "武",
-        "equipHp": 2,
-        "equipMaxHp": 2,
-        "equipF": 1,
-        "opBonus": 2,
-        "overrideOp": null,
-        "special": "freeze",
-        "killCount": 0,
-        "isEquipment": true,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "增加2攻击",
-        "subType": null
-    },
-    {
-        "name": "雷神之锤",
-        "type": "武",
-        "equipType": "武",
-        "equipHp": 3,
-        "equipMaxHp": 3,
-        "equipF": 0,
-        "opBonus": 0,
-        "overrideOp": 5,
-        "special": "lightning",
-        "killCount": 0,
-        "isEquipment": true,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "覆盖5攻击",
-        "subType": null
-    },
-    {
-        "name": "暗影匕首",
-        "type": "武",
-        "equipType": "武",
-        "equipHp": 1,
-        "equipMaxHp": 1,
-        "equipF": 0,
-        "opBonus": 1,
-        "overrideOp": null,
-        "special": "doubleAttack",
-        "killCount": 0,
-        "isEquipment": true,
-        "hp": 1,
-        "maxHp": 1,
-        "skills": "增加1攻击",
-        "subType": null
-    },
-    {
-        "name": "玩具刀",
-        "type": "武",
-        "equipType": "武",
-        "equipHp": 1,
-        "equipMaxHp": 1,
-        "equipF": 0,
-        "opBonus": null,
-        "overrideOp": 1,
-        "special": "doubleAttack",
-        "killCount": 0,
-        "isEquipment": true,
-        "hp": 1,
-        "maxHp": 1,
-        "skills": "覆盖1攻击",
-        "subType": null
-    },
-    {
-        "name": "龙鳞甲",
-        "type": "防",
-        "equipType": "防",
-        "equipHp": 4,
-        "equipMaxHp": 4,
-        "equipF": 0,
-        "special": "dragonScale",
-        "isEquipment": true,
-        "hp": 4,
-        "maxHp": 4,
-        "skills": "装备",
-        "subType": null
-    },
-    {
-        "name": "防弹衣",
-        "type": "防",
-        "equipType": "防",
-        "equipHp": 4,
-        "equipMaxHp": 4,
-        "equipF": 0,
-        "special": null,
-        "isEquipment": true,
-        "hp": 4,
-        "maxHp": 4,
-        "skills": "装备",
-        "subType": null
-    },
-    {
-        "name": "幽灵披风",
-        "type": "防",
-        "equipType": "防",
-        "equipHp": 2,
-        "equipMaxHp": 2,
-        "equipF": 1,
-        "special": "dodge",
-        "isEquipment": true,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "装备",
-        "subType": null
-    },
-{
-  "name": "搏命鬼",
-  "type": "鬼",
-  "op": 1,
-  "f": 1,
-  "hp": 4,
-  "maxHp": 4,
-  "skills": "无视防御",
-  "once": false,
-  "ghostOp": 0,
-  "isLiving": true,
-  "subType": null,
-  "abilities": [
-    {
-      "name": "搏命",
-      "desc": "消耗0.5行动点，自身HP-1，攻击力+1（HP至少为2时可用）。",
-      "code": "if(u.hp >= 2) { u.hp -= 1; u.op += 1; onlineLog(u.name + ' 发动搏命，生命-1，攻击力+1'); } else { onlineLog('搏命失败：生命不足'); }"
-    }
-  ],
-  "isEquipment": false
-},
-{
-  "name": "献祭师",
-  "type": "人",
-  "op": 1,
-  "f": 1,
-  "hp": 2,
-  "maxHp": 2,
-  "skills": "",
-  "once": false,
-  "ghostOp": 0,
-  "isLiving": true,
-  "subType": null,
-  "abilities": [
-    {
-      "name": "血祭",
-      "desc": "消耗0.5行动点，献祭己方4张人类牌（不含自身），对敌方全体造成2点真实伤害。若不足4张则技能无效。",
-      "code": "var myUnits = (onlineMyRole === 'host') ? onlineGameState.myUnits : onlineGameState.enemyUnits; var humans = []; for(var i=0;i<myUnits.length;i++){ var card = myUnits[i]; if(card && card !== u && card.type === '人' && card.hp > 0){ humans.push({slot:i, card:card}); } } if(humans.length >= 4){ for(var k=0;k<4;k++){ var target = humans[k]; target.card.hp = 0; onlineLog('献祭: ' + target.card.name); } var enemies = (onlineMyRole === 'host') ? onlineGameState.enemyUnits : onlineGameState.myUnits; for(var i=0;i<enemies.length;i++){ if(enemies[i] && enemies[i].hp > 0){ enemies[i].hp -= 2; onlineLog('对 ' + enemies[i].name + ' 造成2点伤害'); } } } else { onlineLog('血祭失败: 需要献祭4张人类牌，当前仅有' + humans.length + '张'); }"
-    }
-  ],
-  "isEquipment": false
-},
-{
-  "name": "赌徒药师",
-  "type": "人",
-  "op": 2,
-  "f": 1,
-  "hp": 3,
-  "maxHp": 3,
-  "skills": "",
-  "once": false,
-  "ghostOp": 0,
-  "isLiving": true,
-  "subType": null,
-  "abilities": [
-    {
-      "name": "力量药水",
-      "desc": "50%自身HP-1，50%自身OP+1",
-      "code": "if(Math.random()<0.5){ u.hp-=1; onlineLog(u.name+'力量药水失败，HP-1'); }else{ u.op+=1; onlineLog(u.name+'力量药水成功，OP+1'); }"
-    },
-    {
-      "name": "治疗药水",
-      "desc": "70%恢复3HP，30%自身死亡并带走左右各1格非鬼类队友",
-      "code": "if(Math.random()<0.7){ u.hp=Math.min(u.maxHp,u.hp+3); onlineLog(u.name+'治疗药水恢复3HP'); }else{ onlineLog(u.name+'治疗药水爆炸！'); var myArr=(onlineMyRole==='host')?onlineGameState.myUnits:onlineGameState.enemyUnits; var idx=-1; for(var i=0;i<myArr.length;i++){ if(myArr[i]===u){ idx=i; break; } } if(idx!==-1){ for(var i=Math.max(0,idx-1);i<=Math.min(11,idx+1);i++){ var c=myArr[i]; if(c&&c!==u&&c.type!=='鬼'&&c.hp>0){ c.hp=0; onlineLog(c.name+'被炸死'); } } } u.hp=0; }"
-    }
-  ],
-  "isEquipment": false
-},
-    {
-        "name": "木盾牌",
-        "type": "防",
-        "equipType": "防",
-        "equipHp": 2,
-        "equipMaxHp": 2,
-        "equipF": 1,
-        "special": "dragonScale",
-        "isEquipment": true,
-        "hp": 2,
-        "maxHp": 2,
-        "skills": "装备",
-        "subType": null
-    },
-    {
-        "name": "生命之盾",
-        "type": "防",
-        "equipType": "防",
-        "equipHp": 3,
-        "equipMaxHp": 3,
-        "equipF": 1,
-        "special": "regen",
-        "isEquipment": true,
-        "hp": 3,
-        "maxHp": 3,
-        "skills": "装备",
-        "subType": null
-    }
-    
+  },
+  {
+    "name": "连锁炸弹",
+    "type": "炸",
+    "op": 0,
+    "f": 0,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "FW3·不稳",
+    "once": true,
+    "isBomb": true,
+    "fw": 3,
+    "stable": false,
+    "isLiving": false,
+    "subType": null,
+    "abilities": null
+  },
+  {
+    "name": "火焰之剑",
+    "type": "武",
+    "equipType": "武",
+    "equipHp": 3,
+    "equipMaxHp": 3,
+    "equipF": 0,
+    "opBonus": 3,
+    "overrideOp": null,
+    "special": "burn",
+    "killCount": 0,
+    "isEquipment": true,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "增加3点攻击",
+    "subType": null
+  },
+  {
+    "name": "冰霜之刃",
+    "type": "武",
+    "equipType": "武",
+    "equipHp": 2,
+    "equipMaxHp": 2,
+    "equipF": 1,
+    "opBonus": 2,
+    "overrideOp": null,
+    "special": "freeze",
+    "killCount": 0,
+    "isEquipment": true,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "增加2攻击",
+    "subType": null
+  },
+  {
+    "name": "雷神之锤",
+    "type": "武",
+    "equipType": "武",
+    "equipHp": 3,
+    "equipMaxHp": 3,
+    "equipF": 0,
+    "opBonus": 0,
+    "overrideOp": 5,
+    "special": "lightning",
+    "killCount": 0,
+    "isEquipment": true,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "覆盖5攻击",
+    "subType": null
+  },
+  {
+    "name": "暗影匕首",
+    "type": "武",
+    "equipType": "武",
+    "equipHp": 1,
+    "equipMaxHp": 1,
+    "equipF": 0,
+    "opBonus": 1,
+    "overrideOp": null,
+    "special": "doubleAttack",
+    "killCount": 0,
+    "isEquipment": true,
+    "hp": 1,
+    "maxHp": 1,
+    "skills": "增加1攻击",
+    "subType": null
+  },
+  {
+    "name": "玩具刀",
+    "type": "武",
+    "equipType": "武",
+    "equipHp": 1,
+    "equipMaxHp": 1,
+    "equipF": 0,
+    "opBonus": null,
+    "overrideOp": 1,
+    "special": "doubleAttack",
+    "killCount": 0,
+    "isEquipment": true,
+    "hp": 1,
+    "maxHp": 1,
+    "skills": "覆盖1攻击",
+    "subType": null
+  },
+  {
+    "name": "龙鳞甲",
+    "type": "防",
+    "equipType": "防",
+    "equipHp": 4,
+    "equipMaxHp": 4,
+    "equipF": 0,
+    "special": "dragonScale",
+    "isEquipment": true,
+    "hp": 4,
+    "maxHp": 4,
+    "skills": "装备",
+    "subType": null
+  },
+  {
+    "name": "防弹衣",
+    "type": "防",
+    "equipType": "防",
+    "equipHp": 4,
+    "equipMaxHp": 4,
+    "equipF": 0,
+    "special": null,
+    "isEquipment": true,
+    "hp": 4,
+    "maxHp": 4,
+    "skills": "装备",
+    "subType": null
+  },
+  {
+    "name": "幽灵披风",
+    "type": "防",
+    "equipType": "防",
+    "equipHp": 2,
+    "equipMaxHp": 2,
+    "equipF": 1,
+    "special": "dodge",
+    "isEquipment": true,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "装备",
+    "subType": null
+  },
+  {
+    "name": "搏命鬼",
+    "type": "鬼",
+    "op": 1,
+    "f": 1,
+    "hp": 4,
+    "maxHp": 4,
+    "skills": "无视防御",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": [
+      {
+        "name": "搏命",
+        "desc": "消耗0.5行动点，自身HP-1，攻击力+1（HP至少为2时可用）。",
+        "code": "if(u.hp >= 2) { u.hp -= 1; u.op += 1; onlineLog(u.name + ' 发动搏命，生命-1，攻击力+1'); } else { onlineLog('搏命失败：生命不足'); }"
+      }
+    ],
+    "isEquipment": false
+  },
+  {
+    "name": "献祭师",
+    "type": "人",
+    "op": 1,
+    "f": 1,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": "祭司",
+    "abilities": [
+      {
+        "name": "血祭",
+        "desc": "消耗0.5行动点，献祭己方4张人类牌（不含自身），对敌方全体造成2点真实伤害。若不足4张则技能无效。",
+        "code": "var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var myUnits = isHostSide ? onlineGameState.myUnits : onlineGameState.enemyUnits; var enemyUnits = isHostSide ? onlineGameState.enemyUnits : onlineGameState.myUnits; var humans = []; for(var i=0;i<myUnits.length;i++){ var card = myUnits[i]; if(card && card !== u && card.type === '人' && card.hp > 0){ humans.push({slot:i, card:card}); } } if(humans.length >= 4){ for(var k=0;k<4;k++){ var target = humans[k]; target.card.hp = 0; onlineLog('献祭: ' + target.card.name); } for(var i=0;i<enemyUnits.length;i++){ if(enemyUnits[i] && enemyUnits[i].hp > 0){ enemyUnits[i].hp -= 2; onlineLog('对 ' + enemyUnits[i].name + ' 造成2点伤害'); } } } else { onlineLog('血祭失败: 需要献祭4张人类牌，当前仅有' + humans.length + '张'); }"
+      }
+    ],
+    "isEquipment": false
+  },
+  {
+    "name": "赌徒药师",
+    "type": "人",
+    "op": 2,
+    "f": 1,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": true,
+    "subType": null,
+    "abilities": [
+      {
+        "name": "力量药水",
+        "desc": "50%自身HP-1，50%自身OP+1",
+        "code": "if(Math.random()<0.5){ u.hp-=1; onlineLog(u.name+'力量药水失败，HP-1'); }else{ u.op+=1; onlineLog(u.name+'力量药水成功，OP+1'); }"
+      },
+      {
+        "name": "治疗药水",
+        "desc": "70%恢复3HP，30%自身死亡并带走左右各1格非鬼类队友",
+        "code": "if(Math.random()<0.7){ u.hp=Math.min(u.maxHp,u.hp+3); onlineLog(u.name+'治疗药水恢复3HP'); }else{ onlineLog(u.name+'治疗药水爆炸！'); var isHostSide = false; for(var i=0;i<onlineGameState.myUnits.length;i++){ if(onlineGameState.myUnits[i] === u){ isHostSide = true; break; } } var myArr = isHostSide ? onlineGameState.myUnits : onlineGameState.enemyUnits; var idx=-1; for(var i=0;i<myArr.length;i++){ if(myArr[i]===u){ idx=i; break; } } if(idx!==-1){ for(var i=Math.max(0,idx-1);i<=Math.min(11,idx+1);i++){ var c=myArr[i]; if(c && c!==u && c.type!=='鬼' && c.hp>0){ c.hp=0; onlineLog(c.name+'被炸死'); } } } u.hp=0; }"
+      }
+    ],
+    "isEquipment": false
+  },
+  {
+    "name": "剑术大尸",
+    "type": "人",
+    "op": 3,
+    "f": 1,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "他曾经死过一次",
+    "once": false,
+    "ghostOp": 0,
+    "isLiving": false,
+    "abilities": null,
+    "isEquipment": false
+    "subType": "异"
+  },
+  {
+    "name": "木盾牌",
+    "type": "防",
+    "equipType": "防",
+    "equipHp": 2,
+    "equipMaxHp": 2,
+    "equipF": 1,
+    "special": "dragonScale",
+    "isEquipment": true,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "装备",
+    "subType": null
+  },
+  {
+    "name": "生命之盾",
+    "type": "防",
+    "equipType": "防",
+    "equipHp": 3,
+    "equipMaxHp": 3,
+    "equipF": 1,
+    "special": "regen",
+    "isEquipment": true,
+    "hp": 3,
+    "maxHp": 3,
+    "skills": "装备",
+    "subType": null
+  }
 ]
