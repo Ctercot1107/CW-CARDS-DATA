@@ -40,7 +40,7 @@
   "effectCode": "if(en[targetSlot] && en[targetSlot].hp > 0 && en[targetSlot].type !== '鬼') { if(!onlineGameState.activeEffects) onlineGameState.activeEffects = []; var ownerName = (targetSide === 'host') ? '房主' : '客机'; onlineGameState.activeEffects.push({ name: card.name, owner: ownerName, targetName: en[targetSlot].name, remainingTurns: card.duration, description: card.description, effectType: 'delayed_death', cardId: targetSlot, targetSide: targetSide }); onlineLog(card.name + ' 已施加于 ' + en[targetSlot].name + '，4回合后死亡'); } else { onlineLog(card.name + ' 失败：目标无效或为鬼类'); }",
   "description": "指定对方一张非鬼类卡牌，4回合后立刻死亡。无法免疫、减免，被反制。",
   "EXdesc": "咔哒。咔哒。咔哒。\n\n那声音从森林深处传来，从墙壁缝隙渗出，从每一次心跳的间隙渗入。一天，一周，数月——它如影随形，愈来愈近。\n\n然后，它停了。\n\n那一刻你才明白：那咔哒声是它在转动颈骨。从后往前，一节接一节。转动时它在追踪；停止时，它已来到你身后。\n\n德国黑森林的传说中，它是数百年的梦魇。你看不到它，但它吃下你的每一寸血肉。没有墙体能阻挡，没有距离能逃脱。\n\n唯一能算的，是它的节奏。\n\n——【效果说明】——\n\n指定场上任意一张卡牌。此后每过一回合，其操控者听到一次“咔哒”。第4回合结束时，该卡牌被消灭（无法免疫、减免或反制）。\n\n四声咔哒。时辰已到。"
-}
+},
 {
   "name": "灵光一闪",
   "type": "技",
@@ -495,6 +495,30 @@
     "subType": null
   },
   {
+  "name": "SCP-354",
+  "type": "SCP",
+  "subType": "异",
+  "hp": 6,
+  "maxHp": 6,
+  "f": 0,
+  "op": 0,
+  "once": false,
+  "isLiving": false,
+  "abilities": [
+    {
+      "name": "血祭·复苏",
+      "desc": "消耗己方一张有生命的人类卡牌，自身生命回满。",
+      "code": "var targetSlot = null; var targetCard = null; for(var i=0;i<12;i++){ var c=my[i]; if(c && c.hp>0 && c.type==='人' && c.isLiving===true){ targetSlot=i; targetCard=c; break; } } if(targetSlot!==null){ my[targetSlot]=null; u.hp = u.maxHp; onlineLog(u.name+' 血祭·复苏：消耗 '+targetCard.name+'，生命回满'); } else { onlineLog('血祭·复苏失败：场上没有可消耗的人类卡牌'); }"
+    },
+    {
+      "name": "造物·子体",
+      "desc": "消耗己方一张有生命的卡牌（非SCP-354自身，非SCP-354-2），生成一个SCP-354-2（HP3,OP3）。",
+      "code": "var targetSlot = null; var targetCard = null; for(var i=0;i<12;i++){ var c=my[i]; if(c && c.hp>0 && c.isLiving===true && i!==slot && c.name !== 'SCP-354-2'){ targetSlot=i; targetCard=c; break; } } if(targetSlot===null){ onlineLog('造物·子体失败：没有可消耗的有生命卡牌'); } else { my[targetSlot]=null; var emptySlot = -1; for(var i=0;i<12;i++){ if(!my[i] || my[i].hp<=0){ emptySlot=i; break; } } if(emptySlot===-1){ onlineLog('造物·子体失败：场上无空槽，无法生成SCP-354-2'); my[targetSlot]=targetCard; } else { var newCard = { name: 'SCP-354-2', type: 'SCP', subType: '异', hp: 3, maxHp: 3, f: 0, op: 3, once: false, isLiving: true, abilities: null }; my[emptySlot]=newCard; onlineLog('造物·子体：消耗 '+targetCard.name+'，生成 SCP-354-2'); } }"
+    }
+  ],
+  "EXdesc": "SCP-354是一片位于加拿大北部的红色湖泊，湖中会周期性地生成各种异常实体。这些实体被称为“354-2个体”，它们形态各异，大多具有高度攻击性。\n\n这张卡牌代表的是湖泊本身——它没有生命，却能源源不断地孕育出可怕的生物。\n\n技能「血祭·复苏」：以人类的生命为祭品，湖泊恢复活力。\n技能「造物·子体」：消耗周围的活物，催生出一个新的354-2个体（HP3，攻击力3）。\n\n“湖面如血，深不见底。它在等待下一个祭品。”"
+},
+  {
     "name": "暗影匕首",
     "type": "武",
     "equipType": "武",
@@ -511,6 +535,48 @@
     "skills": "增加1攻击",
     "subType": null
   },
+{
+  "name": "兔子精",
+  "type": "异",
+  "subType": "兔",
+  "hp": 3,
+  "maxHp": 3,
+  "f": 1,
+  "op": 2,
+  "once": false,
+  "isLiving": true,
+  "isEquipment": false,
+  "weapon": null,
+  "armor": null,
+  "skills": "",
+  "ghostOp": 0,
+  "abilities": [
+    {
+      "name": "全局加速",
+      "desc": "消耗0.5行动点，行动点+1，自身hp-2。",
+      "code": "if(u.hp > 2) { u.hp -= 2; if(onlineGameState) onlineGameState.currentMP += 1; onlineLog(u.name + ' 使用全局加速，行动点+1，自身生命-2'); } else { onlineLog('全局加速失败：生命不足'); }"
+    },
+    {
+      "name": "音波攻击",
+      "desc": "消耗0.5行动点，自身hp-2，对敌方所有卡牌造成1点普通伤害（计算防御）。",
+      "code": "if(u.hp > 2) { u.hp -= 2; var enemyUnits = (onlineMyRole === 'host') ? onlineGameState.enemyUnits : onlineGameState.myUnits; for(var i=0;i<12;i++) { var target = enemyUnits[i]; if(target && target.hp > 0) { var def = target.isEquipment ? (target.equipF||0) : ((target.armor && target.armor.equipHp>0) ? (target.armor.equipF||0) : (target.f||0)); var damage = Math.max(0, 1 - def); if(damage > 0) { target.hp -= damage; onlineLog('音波攻击 对 ' + target.name + ' 造成 ' + damage + ' 点伤害'); if(target.hp <= 0 && target.type === '炸' && !target.stable) { applyBombExplosionOnline(enemyUnits, i); } } else { onlineLog('音波攻击 对 ' + target.name + ' 无伤害（防御过高）'); } } } onlineLog(u.name + ' 使用音波攻击，自身生命-2，敌方全体受到1点音波伤害'); } else { onlineLog('音波攻击失败：生命不足'); }"
+    }
+  ]
+},
+  {
+  "name": "绝世武通",
+  "type": "技",
+  "once": true,
+  "isSkillCard": true,
+  "skillType": "active",
+  "targetMode": "none",
+  "canBeCountered": true,
+  "duration": 0,
+  "priority": 0,
+  "effectCode": "var removedCount = 0; for(var i=0;i<12;i++){ if(my[i] && my[i].isEquipment && my[i].equipType === '武'){ my[i]=null; removedCount++; } if(en[i] && en[i].isEquipment && en[i].equipType === '武'){ en[i]=null; removedCount++; } if(my[i] && my[i].weapon){ my[i].weapon=null; removedCount++; } if(en[i] && en[i].weapon){ en[i].weapon=null; removedCount++; } } onlineLog(card.name + ' 移除了 ' + removedCount + ' 件武器');",
+  "description": "删除场上所有武器（武类），包括独立装备卡和已装备的武器。",
+  "EXdesc": "真正的武学巅峰，万物皆可为武器，亦可无武器。一招之间，全场兵器尽数化为虚无。"
+},
   {
     "name": "玩具刀",
     "type": "武",
