@@ -668,6 +668,20 @@
     "subType": null
   },
   {
+    "name": "木盾EX",
+    "type": "防",
+    "equipType": "防",
+    "equipHp": 4,
+    "equipMaxHp": 4,
+    "equipF": 0,
+    "special": "dragonScale",
+    "isEquipment": true,
+    "hp": 2,
+    "maxHp": 2,
+    "skills": "装备",
+    "subType": null
+  },
+  {
     "name": "生命之盾",
     "type": "防",
     "equipType": "防",
